@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Data Filter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- New Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Semi+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #FFE9D0;
+            font-family: 'Sofia Sans Semi Condensed', sans-serif;
+        }
+        .top-bar {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 30px;
+        }
+        .top-bar h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+        .center-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            overflow: hidden;
+        }
+        .center-content img {
+            max-width: 30%;
+            height: auto;
+            margin-right: 20px;
+            opacity: 0;
+            animation: slideFromLeft 1s ease-out forwards;
+        }
+        .center-content .text-content {
+            max-width: 50%;
+        }
+        .center-content h1 {
+            color: black;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideInFromRight 1s ease-out forwards;
+        }
+        .center-content img { animation-delay: 0.2s; }
+        .center-content h1:nth-child(1) { animation-delay: 0.4s; }
+        .center-content h1:nth-child(2) { animation-delay: 0.6s; }
+        .center-content h1:nth-child(3) { animation-delay: 0.8s; }
+        .btn-proceed, .btn-submit {
+            background-color: #4ECDC4;
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            padding: 10px 20px;
+        }
+        .btn-proceed:hover, .btn-submit:hover {
+            background-color: #45B7AA;
+            transform: translateY(-2px);
+        }
+        .btn-proceed {
+            animation: jump 0.5s ease infinite;
+        }
+        .btn-submit img {
+            margin-right: 8px;
+            width: 30px;
+            height: 30px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        textarea.form-control {
+            border: 2px solid #FF6B6B;
+            border-radius: 10px;
+        }
+        #result-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border: 2px solid #FF6B6B;
+        }
+        .result-heading {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        @keyframes slideFromLeft {
+            from { 
+                opacity: 0;
+                transform: translateX(-100%); 
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0); 
+            }
+        }
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar text-center">
+        <h1>Effective Garbage Data Filtering Algorithm for SNS Big Data Processing using Machine Learning</h1>
+    </div>
+
+    <div class="container">
+        <div class="center-content">
+            <img src="{{ url_for('static', filename='folder.png') }}" alt="Folder Image">
+            <div class="text-content">
+                <h1>Tired of Messy Data?</h1>
+                <h1>Press the button to start filtering your SNS data</h1>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-proceed btn-lg" onclick="showForm()">Proceed Further</button>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div></div>
+                <div class="form-container" id="form-container">
+                    <h2 class="text-center mb-4">Raw Data</h2>
+                    <form id="dataForm">
+                        <div class="mb-3">
+                            <textarea class="form-control" name="raw_data" rows="10" placeholder="Enter raw data here..."></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-submit btn-lg">
+                                <img src="{{ url_for('static', filename='delete.png') }}" alt="Delete Icon">
+                                Junk-Free Data
+                            </button>
+                        </div>
+                    </form>
+                    <h2 class="result-heading">Filtered Data:</h2>
+                    <div id="result-container">
+                        <div id="result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript to handle animations and form display -->
+    <script>
+        function showForm() {
+            document.querySelector('.center-content').style.display = 'none';
+            document.querySelector('.btn-proceed').style.display = 'none';
+            document.getElementById('form-container').style.display = 'block';
+        }
+
+        document.querySelector('#dataForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            const filteredSentences = result.filtered_sentences;
+            document.getElementById('result').innerHTML = filteredSentences.join('<br>');
+        };
+    </script>
+</body>
+</html>
